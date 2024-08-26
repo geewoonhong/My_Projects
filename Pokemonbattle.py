@@ -67,6 +67,7 @@ while (1):
 		print("Woah there! Try choosing a number from 1 to 3!")
 		choice = None
 		choice = input("--- ")
+
 # random.choice needs a sequence type argument hence why we convert the dictionary view to a list
 # the dict.keys() method returns a view object of the dictionary's keys; a view object allows us to see the data
 # without copying it
