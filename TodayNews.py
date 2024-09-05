@@ -31,3 +31,6 @@ def notify(headlines):
 if __name__== "__main__":
 	headlines = fetch(max_words=8)
 	notify(headlines)
+
+
+#used a batch script to automate a notification every day windows
