@@ -1,9 +1,10 @@
+<!-- template for the homepage -->
+
 {% extends "base.html" %}
 {% block content %}
-
 <!--index.html-->
 {% if object_list %}
-<h3>All my lists</h3>
+<h3>My Lists</h3>
 {% endif %}
 <ul>
     {% for todolist in object_list %}
@@ -19,11 +20,10 @@
     {% endfor %}
 </ul>
 
-{% endblock %}
-
 <p>
     <input
         value="Add a new list"
         type="button"
-        onclick="location.href='{% url "list-add" %}'"/>
+        onclick="location.href='{% url "list-add" %}'"/> 
 </p>
+{% endblock %}

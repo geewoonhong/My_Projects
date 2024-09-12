@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <title>Django To-do Lists</title>
+</head>
+
+<body>
+    <header>
+        <h1 onclick="location.href='{% url "index" %}'"> 
+            Django To-do Lists
+        </h1>
+    </header>
+
+    <div>
+        {% block content %}
+        This content will be replaced.
+        {% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2024 My To-Do List</p>
+    </footer>
+
+</body>
+</html>
