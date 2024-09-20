@@ -1,9 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 # models for databases: contacts, tasks, opportunities, interactions
 
 class Contact(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	first_name = models.CharField(max_length=100)
 	last_name = models.CharField(max_length=100)
 	email = models.EmailField(unique=True)
@@ -18,6 +20,7 @@ class Contact(models.Model):
 
 
 class Task(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	STATUS = [
 		('pending', 'Pending'),
 		('completed', 'Completed'),
@@ -36,6 +39,7 @@ class Task(models.Model):
 
 
 class Opportunity(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	STAGE_CHOICES = [
 		('new', 'New'),
 		('in_progress', 'In Progress'),
@@ -54,6 +58,7 @@ class Opportunity(models.Model):
 
 
 class Interaction(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	TYPE_CHOICES = [
 		('email', 'Email'),
 		('call', 'Call'),

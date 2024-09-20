@@ -11,7 +11,7 @@
 <body>
 	<header>
 		<h1 onclick="location.href='{% url "index" %}'">
-			Homepage
+			Simple CRM App
 		</h1>
 		<nav>
 			<ul>
@@ -29,6 +29,10 @@
 	</main>
 
 	<footer>
+		<form action="{% url 'logout' %}" method="post" style="display:inline;">
+			{% csrf_token %}
+			<button type="submit">Logout</button>
+		</form>
 		<p>&copy; 2024 Simple CRM</p>
 	</footer>
 

@@ -20,6 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# generate new secret key PLEASE REMEMBER BEFORE DEPLOYMENT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 SECRET_KEY = 'django-insecure-h7#u!e=m2&*u@aq^rf2@hohzfsz=xc=!=-gbzev=@-!oj6j#br'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -27,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = 'index' #redirct login to contact-list
 
 # Application definition
 

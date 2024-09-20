@@ -1,9 +1,14 @@
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse, reverse_lazy
+from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import reverse, reverse_lazy, path
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Contact, Task, Opportunity, Interaction
 
 # Create your views here.
+
+#View for the login page
+class CrmLoginView(LoginView):
+	template_name = 'registration/login.html'
 
 # View for landing page
 def index(request):
