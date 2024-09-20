@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Opportunity List</h2>
+<table>
+	<thead>
+	<tr>
+		<th>Name</th>
+		<th>Contact</th>
+		<th>Value</th>
+		<th>Stage</th>
+		<th>Actions</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for opportunity in opportunities %}
+	<tr>
+		<td>{{ opportunity.name }}</td>
+		<td>{{ opportunity.contact }}</td>
+		<td>{{ opportunity.value }}</td>
+		<td>{{ opportunity.stage }}</td>
+		<td>
+		<a href="{% url 'opportunity-update' opportunity.id %}">Edit</a>
+		<a href="{% url 'opportunity-delete' opportunity.id %}">Delete</a>
+		</td>
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>
+<a href="{% url 'opportunity-create' %}">Create New Opportunity</a>
+{% endblock %}

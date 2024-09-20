@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+	<title>Simple CRM App</title>
+</head>
+
+<body>
+	<header>
+		<h1 onclick="location.href='{% url "index" %}'">
+			Homepage
+		</h1>
+		<nav>
+			<ul>
+				<li><a href="{% url 'contact-list' %}">Contacts</a></li>
+				<li><a href="{% url 'task-list' %}">Tasks</a></li>
+				<li><a href="{% url 'opportunity-list' %}">Opportunities</a></li>
+				<li><a href="{% url 'interaction-list' %}">Interactions</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+		{% block content %}
+		{% endblock %}
+	</main>
+
+	<footer>
+		<p>&copy; 2024 Simple CRM</p>
+	</footer>
+
+</body>
+</html>

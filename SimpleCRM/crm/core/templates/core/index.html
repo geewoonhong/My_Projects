@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Hello to Simple CRM</h2>
+<p>
+	This is the homepage. Use the navigation bar above
+	 to access contacts, tasks, opportunities, and interactions.
+</p>
+
+<div>
+	<h3>CRM Summary</h3>
+	<ul>
+		<li>Total Contacts: {{ total_contacts }}</li>
+		<li>Total Tasks: {{ total_tasks }}</li>
+		<li>Total Opportunities: {{ total_opportunities }}</li>
+		<li>Total Interactions: {{ total_interactions }}</li>
+	</ul>
+</div>
+{% endblock %}

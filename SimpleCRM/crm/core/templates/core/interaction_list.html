@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Interaction List</h2>
+<table>
+	<thead>
+	<tr>
+		<th>Type</th>
+		<th>Contact</th>
+		<th>Date</th>
+		<th>Notes</th>
+		<th>Actions</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for interaction in interactions %}
+	<tr>
+		<td>{{ interaction.interaction_type }}</td>
+		<td>{{ interaction.contact }}</td>
+		<td>{{ interaction.date }}</td>
+		<td>{{ interaction.notes }}</td>
+		<td>
+		<a href="{% url 'interaction-update' interaction.id %}">Edit</a>
+		<a href="{% url 'interaction-delete' interaction.id %}">Delete</a>
+		</td>
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>
+<a href="{% url 'interaction-create' %}">Create New Interaction</a>
+{% endblock %}

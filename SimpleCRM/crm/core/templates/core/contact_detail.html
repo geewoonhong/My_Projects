@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ contact.first_name }} {{ contact.last_name }}</h2>
+<p>Email: {{ contact.email }}</p>
+<p>Phone: {{ contact.phone }}</p>
+<p>Company: {{ contact.company }}</p>
+<p>Position: {{ contact.position }}</p>
+
+<a href="{% url 'contact-update' contact.id %}">Edit</a> |
+<a href="{% url 'contact-delete' contact.id %}">Delete</a> |
+<a href="{% url 'contact-list' %}">Back to Contacts</a>
+{% endblock %}
