@@ -1,11 +1,51 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser, Group, Permission
+from django.core.exceptions import ValidationError
 
 # Create your models here.
+
+# model for custom user
+class CustomUser(AbstractUser):
+	email = models.EmailField(unique=True)
+	first_name = models.CharField(max_length=30)
+	last_name = models.CharField(max_length=30)
+	bio = models.TextField(blank=True, null=True)
+	date_joined = models.DateTimeField(auto_now_add=True)
+	last_login = models.DateTimeField(auto_now=True)
+	role = models.CharField(choices=[('admin', 'Admin'), ('user', 'User')], max_length=50)
+
+	REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
+
+	groups = models.ManyToManyField(
+		Group,
+		blank=True,
+		help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
+		related_name='customuser_set',  # Set a custom related name
+		related_query_name='customuser',
+		verbose_name='groups'
+	)
+	user_permissions = models.ManyToManyField(
+		Permission,
+		blank=True,
+		help_text='Specific permissions for this user.',
+		related_name='customuser_set',  # Set a custom related name
+		related_query_name='customuser',
+		verbose_name='user permissions'
+	)
+
+	def __str__(self):
+		return self.email
+
+	def clean(self):
+		super().clean()
+		if self.role not in ['admin', 'user']:
+			raise ValidationError('Role must be either "admin" or "user".')
+
+
 # models for databases: contacts, tasks, opportunities, interactions
 
 class Contact(models.Model):
-	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
 	first_name = models.CharField(max_length=100)
 	last_name = models.CharField(max_length=100)
 	email = models.EmailField(unique=True)
@@ -20,7 +60,7 @@ class Contact(models.Model):
 
 
 class Task(models.Model):
-	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True)
 	STATUS = [
 		('pending', 'Pending'),
 		('completed', 'Completed'),
@@ -39,7 +79,7 @@ class Task(models.Model):
 
 
 class Opportunity(models.Model):
-	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True)
 	STAGE_CHOICES = [
 		('new', 'New'),
 		('in_progress', 'In Progress'),
@@ -58,7 +98,7 @@ class Opportunity(models.Model):
 
 
 class Interaction(models.Model):
-	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True)
 	TYPE_CHOICES = [
 		('email', 'Email'),
 		('call', 'Call'),

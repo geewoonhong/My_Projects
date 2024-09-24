@@ -1,5 +1,11 @@
 from django.contrib import admin
-from .models import Contact, Task, Opportunity, Interaction
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser, Contact, Task, Opportunity, Interaction
+
+class CustomUserAdmin(UserAdmin):
+	model = CustomUser
+	list_display = ('email', 'username', 'is_staff', 'is_active', 'date_joined')
+	list_filter = ('email', 'username', 'is_staff', 'is_active')
 
 
 class ContactAdmin(admin.ModelAdmin):
@@ -20,6 +26,9 @@ class InteractionAdmin(admin.ModelAdmin):
     list_display = ('interaction_type', 'contact', 'date', 'notes')
     list_filter = ('interaction_type', 'date')
     search_fields = ('notes',)
+
+# Register custom user model
+admin.site.register(CustomUser)
 
 # Register your models here.
 admin.site.register(Contact, ContactAdmin)

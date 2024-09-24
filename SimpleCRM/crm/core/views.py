@@ -1,14 +1,34 @@
-from django.shortcuts import render, get_object_or_404
+from django.db.models.query import QuerySet
+from django.forms import BaseModelForm
+from django.http import HttpRequest
+from django.http.response import HttpResponse as HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse, reverse_lazy, path
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Contact, Task, Opportunity, Interaction
+from .forms import CustomUserCreationForm
 
 # Create your views here.
-
-#View for the login page
+# View for the login page
 class CrmLoginView(LoginView):
 	template_name = 'registration/login.html'
+
+
+# View for new user registration
+def register(request):
+	if request.method=='POST':
+		form = CustomUserCreationForm(request.POST)
+		if form.is_valid():
+			user = form.save()
+			login(request, user)
+			return (redirect('index'))
+	else:
+		form = CustomUserCreationForm()
+	return render(request, 'registration/register.html', {'form': form})
 
 # View for landing page
 def index(request):
@@ -25,6 +45,8 @@ def index(request):
 	}
 	return render(request, 'core/index.html', context)
 
+
+
 ### CRUD for Contacts ###
 # Create Contacts
 class ContactCreateView(CreateView):
@@ -32,6 +54,10 @@ class ContactCreateView(CreateView):
 	template_name = 'core/contact_form.html'
 	fields = ['first_name', 'last_name', 'email', 'company', 'position']
 	success_url = reverse_lazy('contact-list')
+
+	def form_valid(self, form):
+		form.instance.user = self.request.user
+		return super().form_valid(form)
 
 # Read (List) Contacts
 class ContactListView(ListView):
@@ -46,16 +72,36 @@ class ContactUpdateView(UpdateView):
 	fields = ['first_name', 'last_name', 'email', 'company', 'position']
 	success_url = reverse_lazy('contact-list')
 
+	def get_queryset(self):
+		queryset = super().get_queryset() #get all the contacts for now
+		if not self.request.user.is_superuser: #if not the superuser filter the contacts
+			queryset = queryset.filter(user=self.request.user)
+		return queryset
+
+	def dispatch(self, request, *args, **kwargs): #method intercepts request to view before main logic
+		contact = self.get_object()
+		if contact.user != request.user and not request.user.is_superuser:
+			raise PermissionDenied("You are not allowed to edit this contact.")
+		return super().dispatch(request, *args, **kwargs) #if permission check passes, proceed with normal view
+
 # Delete Contact
 class ContactDeleteView(DeleteView):
 	model = Contact
 	template_name = 'core/contact_confirm_delete.html'
 	success_url = reverse_lazy('contact-list')
 
+	def dispatch(self, request, *args, **kwargs):
+		contact = self.get_object()
+		if contact.user != request.user and not request.user.is_superuser:
+			raise PermissionDenied("You are not allowed to delete this contact.")
+		return super().dispatch(request, *args, **kwargs)
+
 #Contact Detail View
 def contact_detail(request, contact_id):
     contact = get_object_or_404(Contact, id=contact_id)
     return render(request, 'core/contact_detail.html', {'contact': contact})
+
+
 
 
 
@@ -88,6 +134,7 @@ class TaskDeleteView(DeleteView):
 
 
 
+
 ### CRUD for Opportunities ###
 # Create Opportunities
 class OpportunityCreateView(CreateView):
@@ -114,6 +161,8 @@ class OpportunityDeleteView(DeleteView):
 	model = Opportunity
 	template_name = 'core/opportunity_confirm_delete.html'
 	success_url = reverse_lazy('opportunity-list')
+
+
 
 
 ### CRUD for Interaction ###

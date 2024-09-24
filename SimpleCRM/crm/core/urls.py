@@ -6,6 +6,7 @@ urlpatterns = [
 	path('', views.index, name='index'),
 	path('login/', views.CrmLoginView.as_view(), name='login'),
 	path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
+	path('register/', views.register, name='register'),
 	path('contacts/', views.ContactListView.as_view(), name='contact-list'),
 	path('contacts/create/', views.ContactCreateView.as_view(), name='contact-create'),
 	path('contacts/update/<int:contact_id>/', views.ContactUpdateView.as_view(), name='contact-update'),
